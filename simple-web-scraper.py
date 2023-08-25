@@ -3,7 +3,7 @@ import requests
 from bs4 import BeautifulSoup
 import pandas as pd
 
-#in base url you can put the company base URL. ex - "https://www.amazon.com/"
+#in base url you can put the target base URL. ex - "https://www.amazon.com/"
 baseurl = ""
 #headers so that the receiving browser sees that all the fetch data query is from a webbrowser instead of python
 headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.82 Safari/537.36'}
@@ -23,7 +23,7 @@ for x in range(1,6):
     soup=BeautifulSoup(k,'html.parser')
     productlist = soup.find("div", {"class":"main-products product-grid"}).find_all("div",{"class":"caption"})
     #print(productlist)
-    #we can just print and check if we are getting the correct value or not and then make modifications accordingly to continue
+    #we can just print and check if we are getting the correct value or not and then make modifications accordingly before continuing.
 
     #here we are sorting the text, bascially instead of going again and again to browser link, now that we have whole bunch of divs from previous fetch, 
     #we just need to filter it again to get specific data, like the link to their product page itself.
@@ -32,21 +32,21 @@ for x in range(1,6):
         productlinks.append(link)
 
     #print(productlinks)
-    #once again we only print productlinks, these small print steps allow us to local any errors at the same time and then move one once it is solved.
+    #once again we only print productlinks, these small print steps allow us to locate any errors at the same time and then move one once it is solved.
 
 
 productsku = []
 productname = []
 productprice = []
 
-#loops all the link we found from main page and then gets required information out of them.
+#loops all the link we found from main products page and then gets required information out of them.
 for link in productlinks:
 
     #once again here, we parse the link and the html parser so we can look more in depth into single products page and then fetch even more details as we need them.
     f = requests.get(link, headers=headers).text
     buh = BeautifulSoup(f, 'html.parser')
 
-    #trying out to find specific divs and more parts, this should be modified by you depending on your target website, same goes for previous iteration as well.
+    #trying out to find specific divs and more parts, this should be modified by you depending on your target website, same goes for above for-loop we used to get links as well.
     try:
         name = buh.find("div", {"class":"title page-title"}).get_text()
         price = buh.find("div", {"class":["product-price-new","product-price"]}).get_text().replace("₹","")
